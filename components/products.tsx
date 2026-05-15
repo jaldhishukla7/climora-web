@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
-import { Wind, Droplets, Thermometer, Fan, Cloud, Snowflake, Factory, Building2, Gauge, ArrowUpFromLine } from "lucide-react"
+import Link from "next/link"
+import { Wind, Droplets, Thermometer, Fan, Cloud, Snowflake, Factory, Building2, Gauge, ArrowUpFromLine, ArrowRight } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 
 interface Product {
@@ -10,6 +11,7 @@ interface Product {
   title: string
   description: string
   image: string
+  slug: string
 }
 
 const products: Product[] = [
@@ -18,60 +20,70 @@ const products: Product[] = [
     title: "Air Handling Units",
     description: "Precision-engineered AHUs designed for optimal air quality, temperature control, and energy efficiency in demanding industrial environments.",
     image: "/images/products/ahu.jpg",
+    slug: "air-handling-units",
   },
   {
     icon: Droplets,
     title: "Air Washer Units",
     description: "Advanced air washing systems that combine humidification and air cleaning for improved indoor air quality and comfort.",
     image: "/images/products/air-washer.jpg",
+    slug: "air-washer-units",
   },
   {
     icon: Thermometer,
     title: "Dehumidifiers",
     description: "Industrial-grade dehumidification systems ensuring precise humidity control for sensitive manufacturing processes.",
     image: "/images/products/dehumidifier.jpg",
+    slug: "dehumidifiers",
   },
   {
     icon: Snowflake,
     title: "Evaporative Cooling",
     description: "Eco-friendly cooling solutions utilizing natural evaporation processes for sustainable temperature management.",
     image: "/images/products/evaporative.jpg",
+    slug: "evaporative-cooling",
   },
   {
     icon: Cloud,
     title: "Fresh Air Units",
     description: "High-performance fresh air handling systems providing continuous ventilation with energy recovery capabilities.",
     image: "/images/products/fresh-air.jpg",
+    slug: "fresh-air-units",
   },
   {
     icon: Fan,
     title: "Fan Coil Units",
     description: "Compact and efficient FCUs delivering precise zone-level heating and cooling for commercial spaces.",
     image: "/images/products/fcu.jpg",
+    slug: "fan-coil-units",
   },
   {
     icon: Factory,
     title: "Industrial Scrubbers",
     description: "Advanced pollution control systems removing harmful particles and gases from industrial exhaust streams.",
     image: "/images/products/scrubber.jpg",
+    slug: "industrial-scrubbers",
   },
   {
     icon: Building2,
     title: "Clean Room Systems",
     description: "Complete cleanroom HVAC solutions meeting ISO standards for pharmaceutical and semiconductor facilities.",
     image: "/images/products/cleanroom.jpg",
+    slug: "clean-room-systems",
   },
   {
     icon: Gauge,
     title: "Ventilation Systems",
     description: "Comprehensive ventilation engineering for factories, warehouses, and commercial buildings.",
     image: "/images/products/ventilation.jpg",
+    slug: "ventilation-systems",
   },
   {
     icon: ArrowUpFromLine,
     title: "Exhaust Units",
     description: "High-performance exhaust units designed to efficiently remove stale air, heat, fumes, and contaminants from industrial and commercial spaces.",
     image: "/images/products/exhaust-unit.jpg",
+    slug: "exhaust-units",
   },
 ]
 
@@ -96,9 +108,12 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
   const Icon = product.icon
 
   return (
-    <div
-      ref={ref}
-      className={`group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 ${
+    <Link
+      href={`/products/${product.slug}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      ref={ref as React.Ref<HTMLAnchorElement>}
+      className={`group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 block ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
       }`}
       style={{ transitionDelay: `${index * 100}ms` }}
@@ -122,12 +137,15 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
         <h3 className="text-xl font-bold text-[#2B2D8E] mb-3 group-hover:text-[#4A4CC8] transition-colors">
           {product.title}
         </h3>
-        <p className="text-muted-foreground text-sm leading-relaxed">
+        <p className="text-muted-foreground text-sm leading-relaxed mb-4">
           {product.description}
         </p>
+        <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#2ECC9A] group-hover:gap-2.5 transition-all">
+          View Details <ArrowRight size={14} />
+        </span>
       </div>
       <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-[#2ECC9A]/20 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity" />
-    </div>
+    </Link>
   )
 }
 
