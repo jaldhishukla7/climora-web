@@ -20,6 +20,7 @@ const spaceMono = Space_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://climora.in'),
   title: 'Climora | Blend of Climate and Innovation',
   description: 'Climora delivers advanced HVAC and climate engineering solutions designed for performance, efficiency, and sustainability across industrial and commercial environments.',
   keywords: ['HVAC', 'climate control', 'air handling units', 'cleanroom', 'industrial cooling', 'sustainability', 'Climora'],
