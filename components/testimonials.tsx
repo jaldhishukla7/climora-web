@@ -1,28 +1,37 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Quote, Star } from "lucide-react"
+import { Quote, Star, MessageSquarePlus } from "lucide-react"
 
-const testimonials = [
+interface Testimonial {
+  name: string
+  position: string
+  company: string
+  content: string
+  rating: number
+}
+
+// ✏️ Replace these with real client testimonials when available
+const testimonials: Testimonial[] = [
   {
     name: "Rajesh Kumar",
     position: "Plant Manager",
     company: "MedPharma Industries",
-    content: "Climora transformed our pharmaceutical facility with their cleanroom HVAC solutions. The precision in temperature and humidity control has significantly improved our production quality.",
+    content: "Climora's cleanroom HVAC solutions transformed our pharmaceutical facility. The precision in temperature and humidity control has significantly improved our production quality and compliance.",
     rating: 5,
   },
   {
     name: "Priya Sharma",
     position: "Operations Director",
     company: "FreshFoods Processing",
-    content: "The energy efficiency of Climora systems exceeded our expectations. We have seen a 40% reduction in our energy bills while maintaining optimal cold storage conditions.",
+    content: "The energy efficiency of Climora systems exceeded our expectations. We saw a 40% reduction in energy bills while maintaining optimal cold storage conditions throughout our facility.",
     rating: 5,
   },
   {
     name: "Amit Patel",
     position: "Technical Head",
     company: "TechData Solutions",
-    content: "Our data center cooling requirements were complex, but Climora delivered a seamless solution. Their smart monitoring system gives us complete visibility and control.",
+    content: "Our data center cooling requirements were complex, but Climora delivered a seamless, reliable solution. Their smart monitoring system gives us complete visibility and control 24/7.",
     rating: 5,
   },
 ]
@@ -83,7 +92,7 @@ export function Testimonials() {
 
               {/* Author */}
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#2B2D8E] to-[#4A4CC8] flex items-center justify-center text-white font-bold">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#2B2D8E] to-[#4A4CC8] flex items-center justify-center text-white font-bold text-lg">
                   {testimonial.name.charAt(0)}
                 </div>
                 <div>
@@ -95,6 +104,32 @@ export function Testimonials() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* CTA — invite real clients to share */}
+        <div
+          className={`mt-16 text-center transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}
+          style={{ transitionDelay: "500ms" }}
+        >
+          <div className="inline-flex flex-col items-center gap-4 bg-white rounded-2xl px-10 py-8 shadow-lg border border-[#2ECC9A]/20">
+            <div className="w-14 h-14 rounded-full bg-[#2ECC9A]/10 flex items-center justify-center">
+              <MessageSquarePlus className="h-7 w-7 text-[#2ECC9A]" />
+            </div>
+            <div>
+              <p className="text-[#2B2D8E] font-semibold text-lg mb-1">Worked with us?</p>
+              <p className="text-muted-foreground text-sm">
+                Share your experience and help others discover Climora.
+              </p>
+            </div>
+            <a
+              href="mailto:info@climora.in?subject=My%20Climora%20Experience"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#2B2D8E] hover:bg-[#4A4CC8] text-white rounded-full text-sm font-semibold transition-colors duration-300"
+            >
+              Share Your Experience →
+            </a>
+          </div>
         </div>
       </div>
     </section>

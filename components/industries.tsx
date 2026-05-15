@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
-import { Pill, UtensilsCrossed, FlaskConical, Shirt, Server, Building } from "lucide-react"
+import { Pill, UtensilsCrossed, FlaskConical, Shirt, Server, Building, Hotel } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 
 interface Industry {
@@ -55,6 +55,13 @@ const industries: Industry[] = [
     description: "Energy-efficient HVAC systems for offices, malls, hospitals, and hospitality venues.",
     image: "/images/industries/commercial.jpg",
     features: ["Energy Efficient", "Comfort Zones", "Smart Controls"],
+  },
+  {
+    icon: Hotel,
+    title: "Hotels & Restaurants",
+    description: "Premium climate control systems for hotels and restaurants ensuring guest comfort, kitchen ventilation, and indoor air quality.",
+    image: "/images/industries/hotels.jpg",
+    features: ["Guest Comfort", "Kitchen Exhaust", "Odour Control"],
   },
 ]
 

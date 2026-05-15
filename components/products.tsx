@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
-import { Wind, Droplets, Thermometer, Fan, Cloud, Snowflake, Factory, Building2, Gauge } from "lucide-react"
+import { Wind, Droplets, Thermometer, Fan, Cloud, Snowflake, Factory, Building2, Gauge, ArrowUpFromLine } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 
 interface Product {
@@ -66,6 +66,12 @@ const products: Product[] = [
     title: "Ventilation Systems",
     description: "Comprehensive ventilation engineering for factories, warehouses, and commercial buildings.",
     image: "/images/products/ventilation.jpg",
+  },
+  {
+    icon: ArrowUpFromLine,
+    title: "Exhaust Units",
+    description: "High-performance exhaust units designed to efficiently remove stale air, heat, fumes, and contaminants from industrial and commercial spaces.",
+    image: "/images/products/exhaust-unit.jpg",
   },
 ]
 
