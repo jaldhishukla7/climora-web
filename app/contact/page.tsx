@@ -14,10 +14,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { MapPin, Phone, Mail, Clock, Send, ArrowLeft, CheckCircle } from "lucide-react"
+import { MapPin, Phone, Mail, Clock, Send, ArrowLeft, CheckCircle, AlertCircle } from "lucide-react"
+
+// 👇 Paste your Google Apps Script Web App URL here after deployment
+const GOOGLE_SCRIPT_URL = "YOUR_SCRIPT_URL_HERE"
 
 const services = [
   "Air Handling Units",
+  "Air Washer Units",
   "Dehumidifiers",
   "Clean Room Systems",
   "Evaporative Cooling",
@@ -25,6 +29,7 @@ const services = [
   "Fan Coil Units",
   "Industrial Scrubbers",
   "Ventilation Systems",
+  "Exhaust Units",
   "Maintenance Services",
   "Consultation",
 ]
@@ -32,15 +37,41 @@ const services = [
 export default function ContactPage() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState("")
+
+  // Controlled form fields
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [phone, setPhone] = useState("")
+  const [company, setCompany] = useState("")
+  const [service, setService] = useState("")
+  const [message, setMessage] = useState("")
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setIsSubmitting(false)
-    setIsSubmitted(true)
+    setError("")
+
+    const payload = { name, email, phone, company, service, message }
+
+    try {
+      // Google Apps Script requires no-cors (response is opaque but data is saved)
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+      // Optimistically show success (no-cors means we can't read the response)
+      setIsSubmitted(true)
+      setName(""); setEmail(""); setPhone(""); setCompany(""); setService(""); setMessage("")
+    } catch {
+      setError("Something went wrong. Please try again or contact us directly.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
+
 
   return (
     <div className="min-h-screen bg-[#f8f9ff]">
@@ -123,6 +154,8 @@ export default function ContactPage() {
                           id="name"
                           placeholder="John Doe"
                           required
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
                           className="border-border focus:border-[#2ECC9A]"
                         />
                       </div>
@@ -133,6 +166,8 @@ export default function ContactPage() {
                           type="email"
                           placeholder="john@company.com"
                           required
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
                           className="border-border focus:border-[#2ECC9A]"
                         />
                       </div>
@@ -146,6 +181,8 @@ export default function ContactPage() {
                           type="tel"
                           placeholder="+91 98765 43210"
                           required
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
                           className="border-border focus:border-[#2ECC9A]"
                         />
                       </div>
@@ -154,6 +191,8 @@ export default function ContactPage() {
                         <Input
                           id="company"
                           placeholder="Your Company"
+                          value={company}
+                          onChange={(e) => setCompany(e.target.value)}
                           className="border-border focus:border-[#2ECC9A]"
                         />
                       </div>
@@ -161,14 +200,14 @@ export default function ContactPage() {
 
                     <div className="space-y-2">
                       <Label htmlFor="service">Service Required *</Label>
-                      <Select required>
+                      <Select required value={service} onValueChange={setService}>
                         <SelectTrigger className="border-border focus:border-[#2ECC9A]">
                           <SelectValue placeholder="Select a service" />
                         </SelectTrigger>
                         <SelectContent>
-                          {services.map((service) => (
-                            <SelectItem key={service} value={service.toLowerCase().replace(/\s+/g, "-")}>
-                              {service}
+                          {services.map((svc) => (
+                            <SelectItem key={svc} value={svc}>
+                              {svc}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -182,13 +221,15 @@ export default function ContactPage() {
                         placeholder="Tell us about your project requirements..."
                         rows={5}
                         required
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
                         className="border-border focus:border-[#2ECC9A] resize-none"
                       />
                     </div>
 
                     <Button
                       type="submit"
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || !service}
                       className="w-full bg-[#2ECC9A] hover:bg-[#25a87e] text-white font-semibold py-6"
                     >
                       {isSubmitting ? (
@@ -203,6 +244,14 @@ export default function ContactPage() {
                         </span>
                       )}
                     </Button>
+
+                    {/* Error message */}
+                    {error && (
+                      <div className="flex items-start gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+                        <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                        <span>{error}</span>
+                      </div>
+                    )}
                   </form>
                 </>
               )}
