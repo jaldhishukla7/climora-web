@@ -67,7 +67,7 @@ const industries: Industry[] = [
 
 function IndustryCard({ industry, index }: { industry: Industry; index: number }) {
   const [isVisible, setIsVisible] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
+  const [isActive, setIsActive] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -77,22 +77,36 @@ function IndustryCard({ industry, index }: { industry: Industry; index: number }
       },
       { threshold: 0.1 }
     )
-
     if (ref.current) observer.observe(ref.current)
     return () => observer.disconnect()
   }, [])
+
+  // Close when clicking outside this card
+  useEffect(() => {
+    if (!isActive) return
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setIsActive(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [isActive])
 
   const Icon = industry.icon
 
   return (
     <div
       ref={ref}
-      className={`group relative h-[400px] rounded-2xl overflow-hidden cursor-pointer ${
+      className={`group relative h-[400px] rounded-2xl overflow-hidden cursor-pointer select-none ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
       } transition-all duration-500`}
       style={{ transitionDelay: `${index * 100}ms` }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      // Desktop: hover
+      onMouseEnter={() => setIsActive(true)}
+      onMouseLeave={() => setIsActive(false)}
+      // Mobile: tap to toggle
+      onClick={() => setIsActive((prev) => !prev)}
     >
       {/* Background Image */}
       <Image
@@ -100,7 +114,7 @@ function IndustryCard({ industry, index }: { industry: Industry; index: number }
         alt={industry.title}
         fill
         className={`object-cover transition-transform duration-700 ${
-          isHovered ? "scale-110" : "scale-100"
+          isActive ? "scale-110" : "scale-100"
         }`}
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
       />
@@ -108,31 +122,44 @@ function IndustryCard({ industry, index }: { industry: Industry; index: number }
       {/* Gradient Overlay */}
       <div
         className={`absolute inset-0 transition-all duration-500 ${
-          isHovered
+          isActive
             ? "bg-gradient-to-t from-[#2B2D8E] via-[#2B2D8E]/80 to-[#2B2D8E]/40"
             : "bg-gradient-to-t from-[#1a1b4b]/90 via-[#2B2D8E]/50 to-transparent"
         }`}
       />
 
+      {/* Tap hint badge — only on mobile when not active */}
+      <div
+        className={`absolute top-4 right-4 md:hidden transition-opacity duration-300 ${
+          isActive ? "opacity-0" : "opacity-100"
+        }`}
+      >
+        <span className="px-2.5 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-xs font-medium">
+          Tap to explore
+        </span>
+      </div>
+
       {/* Content */}
       <div className="absolute inset-0 p-6 flex flex-col justify-end">
-        <div className={`transform transition-transform duration-500 ${isHovered ? "-translate-y-4" : ""}`}>
+        <div className={`transform transition-transform duration-500 ${isActive ? "-translate-y-4" : ""}`}>
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-full bg-[#2ECC9A] flex items-center justify-center">
               <Icon className="h-5 w-5 text-white" />
             </div>
             <h3 className="text-2xl font-bold text-white">{industry.title}</h3>
           </div>
+
           <p
             className={`text-white/90 text-sm leading-relaxed transition-all duration-500 ${
-              isHovered ? "opacity-100 max-h-20" : "opacity-0 max-h-0"
+              isActive ? "opacity-100 max-h-24" : "opacity-0 max-h-0"
             } overflow-hidden`}
           >
             {industry.description}
           </p>
+
           <div
             className={`flex flex-wrap gap-2 mt-4 transition-all duration-500 ${
-              isHovered ? "opacity-100" : "opacity-0"
+              isActive ? "opacity-100" : "opacity-0"
             }`}
           >
             {industry.features.map((feature) => (
@@ -162,7 +189,7 @@ export function Industries() {
             Specialized Solutions Across Sectors
           </h2>
           <p className="text-muted-foreground text-lg max-w-3xl mx-auto text-pretty">
-            From pharmaceutical cleanrooms to data center cooling, Climora delivers 
+            From pharmaceutical cleanrooms to data center cooling, Climora delivers
             tailored HVAC solutions that meet the unique demands of each industry.
           </p>
         </div>

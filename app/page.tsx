@@ -7,6 +7,7 @@ import { Sustainability } from "@/components/sustainability"
 import { WhyClimora } from "@/components/why-climora"
 import { Testimonials } from "@/components/testimonials"
 import { Footer } from "@/components/footer"
+import { ChatBot } from "@/components/chatbot"
 
 export default function Home() {
   return (
@@ -20,6 +21,8 @@ export default function Home() {
       <WhyClimora />
       <Testimonials />
       <Footer />
+      <ChatBot />
     </main>
   )
 }
+
