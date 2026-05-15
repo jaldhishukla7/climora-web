@@ -95,7 +95,7 @@ export function ChatBot() {
     ])
     setTimeout(() => {
       window.open(waLink(product), "_blank")
-    }, 800)
+    }, 2500)
   }
 
   function handleCustomSend() {
@@ -110,7 +110,7 @@ export function ChatBot() {
         ...prev,
         { from: "bot", text: "Opening WhatsApp for you now... 🚀" },
       ])
-    }, 600)
+    }, 2500)
   }
 
   function resetChat() {
